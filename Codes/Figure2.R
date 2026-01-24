@@ -233,7 +233,7 @@ summary(F_samp)
 # Monte Carlo wrapper for R0(T, VD)
 # Uncertainty in fecundity only (as used in your plot)
 # ============================================================
-
+VD_vals <- c(5, 10, 25, 40)
 R0_MC <- function(T, VD, F_mean, F_sd = NULL, n = 1000) {
   
   # If SD not provided, infer from min–max range (triangular)
@@ -258,7 +258,13 @@ R0_MC <- function(T, VD, F_mean, F_sd = NULL, n = 1000) {
     upper = apply(R0_mat, 1, quantile, probs = 0.975, na.rm = TRUE)
   )
 }
+# Vapour deficit values you want to plot
+VD_vals <- c(5, 10, 20, 30)   # example – use yours
 
+# Generate one colour per VD curve
+cols <- colorRampPalette(c(
+  "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c"
+))(length(VD_vals))
 # ---------------------------
 # SAVE FIGURE (300 dpi)
 # ---------------------------
@@ -275,18 +281,18 @@ plot(
   ylim = c(0, 1800),
   xlab = "Temperature (°C)",
   ylab = expression(R[0]),
-  main = expression("")
+  las = 1
 )
 
 for (i in seq_along(VD_vals)) {
   
-  VD <- VD_vals[i]
+  VD  <- VD_vals[i]
   col <- cols[i]
   
   # Deterministic mean
   det <- R0_tick(T_seq, VD, F = F_mean)
   
-  # Monte Carlo
+  # Monte Carlo (uncertainty)
   mc <- R0_MC(T_seq, VD, F_mean, n = 1000)
   
   # Uncertainty band
@@ -298,20 +304,17 @@ for (i in seq_along(VD_vals)) {
   )
   
   # Stochastic mean
-  lines(T_seq, mc$mean, col = col, lwd = 2, lty = 1)
+  lines(T_seq, mc$mean, col = col, lwd = 2)
   
-  # Deterministic mean (dashed, drawn last)
-  lines(T_seq, det, col = col, lwd = 3.5, lty = 2)
+  # Deterministic mean (dashed)
+  lines(T_seq, det, col = col, lwd = 3, lty = 2)
 }
 
 legend(
   "topleft",
-  legend = c(
-    "Solid = stochastic mean",
-    "Dashed = deterministic mean",
-    "Shaded = 95% uncertainty",
-    paste("VD =", VD_vals)
-  ),
+  legend = paste("VD =", VD_vals),
+  col = cols,
+  lwd = 3,
   bty = "n"
 )
 
