@@ -8,7 +8,8 @@ Repository contents
   • Code 3: Main model to generate the raster outputs
   •	Figure 1: Workflow
 	•	Figure 2: Temperature–R₀ relationships illustrating deterministic and uncertainty-propagated expectations
-	•	Figure 3: Quarterly spatial comparison of deterministic and stochastic R₀ across North Africa
+	•	Figure 3-4: Quarterly spatial comparison of deterministic and stochastic R₀ across North Africa and distribution of log-scale differences between stochastic and deterministic reproduction numbers.
+	
 
 Key features
 	•	Explicit treatment of parametric biological uncertainty within a mechanistic framework
